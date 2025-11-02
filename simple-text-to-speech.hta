@@ -1,0 +1,96 @@
+<!--
+    Simple Offline Text to Speech Converter (VBScript + HTA)
+    Developed & Innovated by: Aman Aslam
+    EMSPakistan IT (Pvt. Ltd.)
+    Version: 1.0
+    Date: October 2025
+    Description:
+      World's Simplest Offline Text-to-Speech Converter using Windows SAPI.
+      No installation, no dependencies — pure VBScript + HTA innovation.
+-->
+
+<html>
+<head>
+<title>Text to Speech Converter - Aman Aslam (EMSPakistan IT)</title>
+<HTA:APPLICATION
+  ID="ttsApp"
+  APPLICATIONNAME="Aman Aslam TTS Converter"
+  SCROLL="no"
+  SINGLEINSTANCE="yes"
+  BORDER="dialog"
+  CAPTION="yes"
+  SHOWINTASKBAR="yes"
+  WINDOWSTATE="normal"
+  ICON="mshta.exe">
+
+<style>
+body {
+    font-family: Arial;
+    background: #f7f7f7;
+    margin: 20px;
+}
+textarea {
+    width: 100%;
+    height: 250px;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+button {
+    padding: 10px 20px;
+    font-size: 14px;
+    margin-top: 10px;
+    background: #0078D7;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+button:hover {
+    background: #005fa3;
+}
+footer {
+    margin-top: 15px;
+    font-size: 12px;
+    color: gray;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+<h3>Enter your text below:</h3>
+<textarea id="userText" placeholder="Type or paste your full text here..."></textarea><br>
+<button onclick="ConvertToSpeech()">Convert to Speech</button>
+
+<footer>Developed by <b>Aman Aslam</b>  "EMSPakistan IT (Pvt. Ltd.)"</footer>
+
+<script language="VBScript">
+Sub ConvertToSpeech()
+    Dim voice, fileStream, fso, filePath, timestamp, userText
+
+    userText = document.getElementById("userText").value
+    If Trim(userText) = "" Then
+        MsgBox "Please enter some text before converting.", vbExclamation, "Error"
+        Exit Sub
+    End If
+
+    Set voice = CreateObject("SAPI.SpVoice")
+    Set fileStream = CreateObject("SAPI.SpFileStream")
+    Set fso = CreateObject("Scripting.FileSystemObject")
+
+    timestamp = Replace(Replace(Replace(Now, ":", "_"), "/", "_"), " ", "_")
+    filePath = fso.GetAbsolutePathName(".") & "\EMSPakistan_TTS_" & timestamp & ".wav"
+
+    fileStream.Open filePath, 3, False
+    Set voice.AudioOutputStream = fileStream
+    voice.Speak userText
+    fileStream.Close
+
+    MsgBox "Speech generated successfully by Aman Aslam's TTS Converter!" & vbCrLf & filePath, vbInformation, "Success"
+End Sub
+</script>
+
+</body>
+</html>
